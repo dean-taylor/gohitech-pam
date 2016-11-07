@@ -1,0 +1,14 @@
+{
+  "name": "gohitech-pam",
+  "version": "0.1.0",
+  "author": "Dean Taylor <dean@gohitech.net>",
+  "summary": "Configure Pluggable Authentication Module",
+  "license": "Apache 2.0",
+  "source": "https://github.com/dean-taylor/gohitech-pam",
+  "project_page": "https://github.com/dean-taylor/gohitech-pam",
+  "issues_url": "https://github.com/dean-taylor/gohitech-pam/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ]
+}
+
