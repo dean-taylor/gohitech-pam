@@ -1,0 +1,2 @@
+class pam::params {
+}

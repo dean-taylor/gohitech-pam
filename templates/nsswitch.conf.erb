@@ -1,0 +1,37 @@
+# Managed by Puppet. DO NOT EDIT.
+#
+# /etc/nsswitch.conf
+#
+# The entry '[NOTFOUND=return]' means that the search for an
+# entry should stop if the search in the previous entry turned
+# up nothing. Note that if the search failed due to some other reason
+# (like no NIS server responding) then the search continues with the
+# next entry.
+#
+
+passwd:     <%= @passwd_real %>
+shadow:     <%= @shadow_real %>
+group:      <%= @group_real %>
+<% if @initgroups -%>
+initgroups: <%= @initgroups_real %>
+<% end -%>
+
+hosts:      <%= @hosts_real %>
+
+bootparams: <%= @bootparams_real %>
+
+ethers:     <%= @ethers_real %>
+netmasks:   <%= @netmasks_real %>
+networks:   <%= @networks_real %>
+protocols:  <%= @protocols_real %>
+rpc:        <%= @rpc_real %>
+services:   <%= @services_real %>
+
+netgroup:   <%= @netgroup_real %>
+
+<% if @publickey -%>
+publickey:  <%= @publickey_real %>
+
+<% end -%>
+automount:  <%= @automount_real %>
+aliases:    <%= @aliases_real %>

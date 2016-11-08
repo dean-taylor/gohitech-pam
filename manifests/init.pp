@@ -1,3 +1,9 @@
+class pam (
+  $enable_mkhomedir = true,
+  $pam_mkhomedir    = $pam::params::pam_mkhomedir,
+) inherits pam::params {
+}
+
 # == Class: pam
 #
 # Full description of class pam here.
@@ -35,7 +41,3 @@
 #
 # Copyright 2016 Your name here, unless otherwise noted.
 #
-class pam {
-
-
-}
