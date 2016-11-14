@@ -1,0 +1,15 @@
+<%= @type %> <%= @control -%>
+ pam_winbind.so<% if @debug %> debug<% end -%>
+<% if @debug_state %> debug_state<% end -%>
+<% unless @require_membership_of.empty? -%>
+ require_membership_of=<%= @require_membership_of.join(',') -%>
+<% end -%>
+<% if @krb5_auth -%>
+ krb5_auth krb5_ccache_type=<%= @krb5_ccache_type -%>
+<% end -%>
+<% if @cached_login and @type != 'password' %> cached_login<% end -%>
+<% if @silent %> silent<% end -%>
+<% if @mkhomedir %> mkhomedir<% end -%>
+<% if @type == 'auth' -%>
+ use_first_pass<% elsif @type == 'password' -%>
+ use_authtok<% end %>

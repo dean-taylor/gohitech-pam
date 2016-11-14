@@ -1,17 +1,8 @@
 # Managed by Puppet. DO NOT EDIT.
-#
-# /etc/nsswitch.conf
-#
-# The entry '[NOTFOUND=return]' means that the search for an
-# entry should stop if the search in the previous entry turned
-# up nothing. Note that if the search failed due to some other reason
-# (like no NIS server responding) then the search continues with the
-# next entry.
-#
 
-passwd:     <%= @passwd_real %>
-shadow:     <%= @shadow_real %>
-group:      <%= @group_real %>
+passwd:     <%= @passwd_real %><% if @winbind_enabled %> winbind<% end %>
+shadow:     <%= @shadow_real %><% if @winbind_enabled %> winbind<% end %>
+group:      <%= @group_real %><% if @winbind_enabled %> winbind<% end %>
 <% if @initgroups -%>
 initgroups: <%= @initgroups_real %>
 <% end -%>

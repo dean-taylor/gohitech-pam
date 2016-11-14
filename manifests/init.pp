@@ -1,7 +1,13 @@
 class pam (
-  $enable_mkhomedir = true,
-  $pam_mkhomedir    = $pam::params::pam_mkhomedir,
+  $services = {},
 ) inherits pam::params {
+  validate_hash($services)
+
+  package { 'pam':
+    ensure => present,
+  }
+
+  if $services { create_resources(pam::service,$services) }
 }
 
 # == Class: pam
