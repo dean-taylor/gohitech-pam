@@ -1,15 +1,15 @@
 define pam::d::winbind (
-  $type,
-  $cached_login          = false,
   $control,
   $debug   = undef,
   $debug_state = undef,
-  $krb5_auth             = false,
+  $enable_cached_login   = false,
+  $enable_krb5_auth      = false,
+  $enable_mkhomedir      = false,
   $krb5_ccache_type      = "",
-  $mkhomedir             = false,
   $require_membership_of = [],
   $silent                = false,
   $service,
+  $type,
 ) {
   if ! defined(Concat["/etc/pam.d/${service}"]) {
     concat { "/etc/pam.d/${service}":

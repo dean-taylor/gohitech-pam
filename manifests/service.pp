@@ -26,8 +26,9 @@ define pam::service::rule (
   }
 
   case $module_path {
-    'pam_winbind.so':	{ include pam::winbind }
-    'pam_script.so':	{ include pam::script }
+    'pam_oddjob_mkhomedir.so': { include pam::oddjob_mkhomedir }
+    'pam_script.so':	       { include pam::script }
+    'pam_winbind.so':	       { include pam::winbind }
   }
 
   concat::fragment { "/etc/pam.d/${rule['service']}_${rule['type']}_${rule['module']}":

@@ -1,6 +1,6 @@
-class pam::mkhomedir (
+class pam::oddjob_mkhomedir (
   $packages = ['oddjob-mkhomedir',],
-) inherits pam::params {
+) {
   include pam
 
   package { $packages:

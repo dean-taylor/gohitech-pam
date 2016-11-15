@@ -1,16 +1,21 @@
 class pam::params {
-  $pam_mkhomedir = $::operatingsystemmajrelease ? {
-    '7'         => 'pam_oddjob_mkhomedir.so',
-    default     => 'pam_mkhomedir.so',
+  $mkhomedir_module = $::operatingsystemmajrelease ? {
+    '7'     => 'oddjob_mkhomedir',
+    default => 'mkhomedir',
+  }
+
+  $pam_pwquality = $::operatingsystemmajrelease ? {
+    '7'     => 'pwquality',
+    default => 'cracklib',
   }
 
   $succeed_if_uid = $::operatingsystemmajrelease ? {
-    '7'         => '1000',
-    default     => '500',
+    '7'     => '1000',
+    default => '500',
   }
 
   $winbind_packages = $::osfamily ? {
-    'RedHat' => $::operatingsystemmajrelease ? {
+    'RedHat'  => $::operatingsystemmajrelease ? {
       '7'     => 'samba-winbind-modules',
       default => 'samba-winbind-clients',
     },
