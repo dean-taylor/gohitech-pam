@@ -5,15 +5,16 @@ class pam::authconf (
   $script_onerr   = 'fail',		# success|fail
   $succeed_if_uid = $pam::params::succeed_if_uid,
   $winbind        = false,
+  $winbind_cached_login = false,
   $winbind_krb5_ccache_type = $pam::params::winbind_krb5_ccache_type,
-  $winbind_require_membership_of = [],
+  $winbind_require_membership_of = undef,
 ) inherits pam::params {
-  validate_bool($access,$script,$winbind)
+  validate_bool($access,$script,$winbind,$winbind_cached_login)
   if $access_listsep { validate_re($access_listsep,'^.$') }
   validate_re($script_onerr,'^fail|success$')
   validate_integer($succeed_if_uid,2000)
   validate_re($winbind_krb5_ccache_type,'^FILE|KEYRING$')
-  validate_array($winbind_require_membership_of)
+  if $winbind_require_membership_of { validate_array($winbind_require_membership_of) }
 
   $rules_default = [
     { order=>1,type=>'auth',    control=>'required',  module=>'env', },
@@ -43,13 +44,22 @@ class pam::authconf (
   }
 
   if $winbind {
-    $cached_login = ['cached_login',]
-    $krb5_auth = ['krb5_auth',"krb5_ccache_type=${krb5_ccache_type}",]
+    $cached_login = $winbind_cached_login ? {
+      true    => ['cached_login',],
+      default => [],
+    }
+    $krb5_auth = ['krb5_auth',"krb5_ccache_type=${winbind_krb5_ccache_type}",]
+    if $winbind_require_membership_of {
+      $_workgroup = upcase(regsubst($::domain,'^(.*?)\..*$','\1'))
+      $_require_membership_of = concat(["require_membership_of=${_workgroup}\\${::hostname}$",],$winbind_require_membership_of)
+      $__require_membership_of = join($_require_membership_of,',')
+      $require_membership_of = [$__require_membership_of,]
+    }
     $rules_winbind = [
-      { type=>'auth',order=>4,control=>'sufficient',module=>'winbind',args=>concat($cached_login,$krb5_auth,['use_first_pass',]), },
+      { type=>'auth',order=>4,control=>'sufficient',module=>'winbind',args=>concat($cached_login,$krb5_auth,$require_membership_of,['use_first_pass',]), },
       { type=>'account',order=>4,control=>'[default=bad success=ok user_unknown=ignore]',module=>'winbind',args=>concat($cached_login,$krb5_auth), },
       { type=>'password',order=>4,control=>'sufficient',module=>'winbind',args=>concat($krb5_auth,['use_authtok',]), },
-      { type=>'session',order=>4,control=>'optional',module=>'winbind',args=>concat($cached_login,krb5_auth), },
+      { type=>'session',order=>4,control=>'optional',module=>'winbind',args=>concat($cached_login,$krb5_auth), },
     ]
 
     ::pam::service { 'system-auth-puppet_winbind':

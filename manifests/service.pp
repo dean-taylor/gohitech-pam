@@ -13,8 +13,9 @@ define pam::service::rule (
   if $rule['order'] { $_index = $rule['order'] }
   else { $_index = '5' }
 
-  if $rule['type'] == 'auth' { $_order = "aauth${_index}" }
-  else { $_order = "${rule['type']}${_index}" }
+  $_type = regsubst($rule['type'],'^-?(.*)$','\1')
+  if $_type == 'auth' { $_order = "aauth${_index}" }
+  else { $_order = "${_type}${_index}" }
 
   if is_hash($rule['args']) {
     $_module_args = join_keys_to_values($rule['args'], "=")
@@ -31,7 +32,7 @@ define pam::service::rule (
 
   concat::fragment { "/etc/pam.d/${rule['service']}_${rule['type']}_${rule['module']}":
     target  => "/etc/pam.d/${rule['service']}",
-    content => "${rule['type']} ${rule['control']}\t${module_path} ${module_args}\n",
+    content => "${rule['type']}\t${rule['control']}\t${module_path} ${module_args}\n",
     order   => $_order,
   }
 }
