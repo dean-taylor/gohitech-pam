@@ -1,20 +1,20 @@
 define pam::d::winbind (
   $control,
+  $service,
+  $type,
   $debug   = undef,
   $debug_state = undef,
   $enable_cached_login   = false,
   $enable_krb5_auth      = false,
   $enable_mkhomedir      = false,
-  $krb5_ccache_type      = "",
+  $krb5_ccache_type      = '',
   $require_membership_of = [],
   $silent                = false,
-  $service,
-  $type,
 ) {
   if ! defined(Concat["/etc/pam.d/${service}"]) {
     concat { "/etc/pam.d/${service}":
       ensure  => present,
-      content => template("pam/pam.d/winbind.erb"),
+      content => template('pam/pam.d/winbind.erb'),
       warn    => true,
     }
   }

@@ -14,13 +14,13 @@ define pam::service::winbind (
 ) {
   if ! defined(Concat["/etc/pam.d/${service}"]) {
     concat { "/etc/pam.d/${service}":
-      ensure  => present,
-      warn    => true,
+      ensure => present,
+      warn   => true,
     }
   }
 
   concat::fragment { "/etc/pam.d/${service}_${type}_winbind":
-    target => "/etc/pam.d/${service}",
-    content => template("pam/pam.d/winbind.erb")
+    target  => "/etc/pam.d/${service}",
+    content => template('pam/pam.d/winbind.erb')
   }
 }

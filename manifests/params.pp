@@ -23,7 +23,7 @@ class pam::params {
   }
 
   $winbind_krb5_ccache_type = $::operatingsystemmajrelease ? {
-    '7'		=> 'KEYRING',
-    default	=> 'FILE',
+    '7'     => 'KEYRING',
+    default => 'FILE',
   }
 }

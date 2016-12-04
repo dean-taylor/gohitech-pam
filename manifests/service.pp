@@ -18,7 +18,7 @@ define pam::service::rule (
   else { $_order = "${_type}${_index}" }
 
   if is_hash($rule['args']) {
-    $_module_args = join_keys_to_values($rule['args'], "=")
+    $_module_args = join_keys_to_values($rule['args'], '=')
     $module_args = join($_module_args,' ')
   }
   elsif is_array($rule['args']) {
@@ -27,8 +27,8 @@ define pam::service::rule (
 
   case $module_path {
     'pam_oddjob_mkhomedir.so': { include pam::oddjob_mkhomedir }
-    'pam_script.so':	       { include pam::script }
-    'pam_winbind.so':	       { include pam::winbind }
+    'pam_script.so':           { include pam::script }
+    'pam_winbind.so':          { include pam::winbind }
   }
 
   concat::fragment { "/etc/pam.d/${rule['service']}_${rule['type']}_${rule['module']}":
@@ -39,8 +39,8 @@ define pam::service::rule (
 }
 
 define pam::service (
-  $service = $name,
   $rules,
+  $service = $name,
 ) {
   validate_string($service)
   validate_array($rules)
@@ -53,7 +53,7 @@ define pam::service (
     concat::fragment { "/etc/pam.d/${service}__header":
       target  => "/etc/pam.d/${service}",
       content => "#%PAM-1.0\n# This file is managed by Puppet. DO NOT EDIT.\n",
-      order   => "00",
+      order   => '00',
     }
   }
 

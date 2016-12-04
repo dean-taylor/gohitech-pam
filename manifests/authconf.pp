@@ -1,13 +1,13 @@
 class pam::authconf (
-  $access           = false,
-  $access_listsep   = undef,
-  $enable_mkhomedir = true,
-  $enable_script    = false,
-  $mkhomedir_module = $pam::params::mkhomedir_module,
-  $pwquality      = $pam::params::pam_pwquality,
-  $script_onerr     = 'fail',		# success|fail
-  $succeed_if_uid = $pam::params::succeed_if_uid,
-  $winbind        = false,
+  $access               = false,
+  $access_listsep       = undef,
+  $enable_mkhomedir     = true,
+  $enable_script        = false,
+  $mkhomedir_module     = $pam::params::mkhomedir_module,
+  $pwquality            = $pam::params::pam_pwquality,
+  $script_onerr         = 'fail',                         # success|fail
+  $succeed_if_uid       = $pam::params::succeed_if_uid,
+  $winbind              = false,
   $winbind_cached_login = false,
   $winbind_krb5_ccache_type = $pam::params::winbind_krb5_ccache_type,
   $winbind_require_membership_of = undef,
@@ -24,11 +24,11 @@ class pam::authconf (
     { order=>1,type=>'auth',    control=>'sufficient',module=>'unix',args=>['nullok','try_first_pass',], },
     { order=>2,type=>'auth',    control=>'requisite', module=>'succeed_if',args=>["uid >= ${succeed_if_uid}",'quiet_success',], },
     { order=>9,type=>'auth',    control=>'required',  module=>'deny', },
-    { order=>1,type=>'account', control=>'required',  module=>'unix',args=>["broken_shadow",] },
+    { order=>1,type=>'account', control=>'required',  module=>'unix',args=>['broken_shadow',] },
     { order=>2,type=>'account', control=>'sufficient',module=>'localuser', },
     { order=>2,type=>'account', control=>'sufficient',module=>'succeed_if',args=>["uid < ${succeed_if_uid}",'quiet',], },
     { order=>9,type=>'account', control=>'required',  module=>'permit', },
-    { order=>1,type=>'password',control=>'requisite', module=>"${pwquality}",args=>['try_first_pass','local_users_only','retry=3','authtok_type=',], },
+    { order=>1,type=>'password',control=>'requisite', module=>$pwquality,args=>['try_first_pass','local_users_only','retry=3','authtok_type=',], },
     { order=>2,type=>'password',control=>'sufficient',module=>'unix',args=>['md5','shadow','nullok','try_first_pass','use_authtok',], },
     { order=>9,type=>'password',control=>'required',  module=>'deny', },
     { order=>1,type=>'session', control=>'optional',  module=>'keyinit',args=>['revoke',], },
@@ -59,7 +59,7 @@ class pam::authconf (
 
   if $enable_mkhomedir {
     $rules_mkhomedir = [
-      { type=>'session',order=>4,control=>'optional',module=>"${mkhomedir_module}",args=>["umask=0077",], },
+      { type=>'session',order=>4,control=>'optional',module=>$mkhomedir_module,args=>['umask=0077',], },
     ]
     ::pam::service { 'system-auth-puppet_mkhomedir':
       service => 'system-auth-puppet',
@@ -73,7 +73,7 @@ class pam::authconf (
 
   if $enable_script {
     $rules_script = [
-      { type=>'session',order=>7,control=>'required',module=>'script',args=>["onerr=$script_onerr",], },
+      { type=>'session',order=>7,control=>'required',module=>'script',args=>["onerr=${script_onerr}",], },
     ]
     ::pam::service { 'system-auth-puppet_script':
       service => 'system-auth-puppet',

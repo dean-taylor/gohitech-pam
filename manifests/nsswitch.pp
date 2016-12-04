@@ -62,6 +62,6 @@ class pam::nsswitch (
 
   file { '/etc/nsswitch.conf.puppet':
     ensure  => present,
-    content => template("pam/nsswitch.conf.erb"),
+    content => template('pam/nsswitch.conf.erb'),
   }
 }

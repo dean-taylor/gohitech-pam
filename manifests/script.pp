@@ -1,9 +1,6 @@
 class pam::script (
-  
 ) {
-  package { "pam_script":
+  package { 'pam_script':
     ensure => present,
   }
-
-  
 }

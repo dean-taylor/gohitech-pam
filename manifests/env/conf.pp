@@ -1,7 +1,7 @@
 define pam::env::set (
   $variable = $name,
-  $default  = "",
-  $override = "",
+  $default  = '',
+  $override = '',
 ) {
   include pam::env::conf
 
@@ -16,7 +16,7 @@ class pam::env::conf (
 ) inherits pam::params {
   include pam
 
-  concat { "/etc/security/pam_env.conf":
+  concat { '/etc/security/pam_env.conf':
     ensure => present,
   }
 }
